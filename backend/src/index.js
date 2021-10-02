@@ -6,9 +6,8 @@ const app = express();
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 
-app.get("/", (req, res) => {
-  return res.send("Hello, World!");
-});
+app.use(express.json());
+app.use(require("./routes"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
