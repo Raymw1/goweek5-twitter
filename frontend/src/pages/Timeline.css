@@ -1,10 +1,30 @@
 .timeline-wrapper {
-  width: 600px;
+  width: min(600px, 90%);
   margin: 50px auto;
 
   display: flex;
   flex-direction: column;
   align-items: stretch;
+}
+
+.timeline-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 54px auto 54px;
+  align-items: center;
+}
+
+.timeline-header button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  color: #4bb0ee;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.timeline-header img {
+  justify-self: center;
 }
 
 .timeline-wrapper form {

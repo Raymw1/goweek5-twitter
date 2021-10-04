@@ -14,6 +14,8 @@ export default class Timeline extends Component {
   };
 
   async componentDidMount() {
+    const user = localStorage.getItem("@GoTwitter:username");
+    if (!user.length) this.handleLogout();
     this.subscribeToEvents();
     const { data: tweets } = await api.get("tweets");
     this.setState({ tweets });
@@ -48,10 +50,18 @@ export default class Timeline extends Component {
     });
   };
 
+  handleLogout = () => {
+    localStorage.setItem("@GoTwitter:username", "");
+    this.props.history.push("/");
+  };
+
   render() {
     return (
       <div className="timeline-wrapper">
-        <img src={twitterLogo} height={24} alt="GoTwitter" />
+        <div className="timeline-header">
+          <button onClick={this.handleLogout}>Logout</button>
+          <img src={twitterLogo} height={24} alt="GoTwitter" />
+        </div>
         <form>
           <textarea
             value={this.state.newTweet}
