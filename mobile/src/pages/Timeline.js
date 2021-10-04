@@ -4,7 +4,7 @@ import api from '../services/api';
 import {
   KeyboardAvoidingView,
   View,
-  TextInput,
+  FlatList,
   TouchableOpacity,
   StyleSheet,
   Text,
@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import Tweet from '../components/Tweet';
 
 export default class Timeline extends Component {
   static navigationOptions = {
@@ -47,12 +49,13 @@ export default class Timeline extends Component {
   };
 
   render() {
-    const {tweets} = this.state;
     return (
-      <View>
-        {tweets.map(tweet => (
-          <Text>{tweet.content}</Text>
-        ))}
+      <View style={styles.container}>
+        <FlatList
+          data={this.state.tweets}
+          keyExtractor={tweet => tweet._id}
+          renderItem={({item}) => <Tweet tweet={item} />}
+        />
       </View>
     );
   }
