@@ -1,26 +1,20 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import socket from 'socket.io-client';
+import {API_URL} from '@env';
 
-import {
-  KeyboardAvoidingView,
-  View,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  AsyncStorage,
-} from 'react-native';
+import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Tweet from '../components/Tweet';
 
 export default class Timeline extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: 'Início',
     headerTitleAlign: 'center',
     headerRight: () => (
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity onPress={() => navigation.navigate('New')}>
         <Icon
           style={{marginRight: 10}}
           name="add-circle-outline"
@@ -29,15 +23,30 @@ export default class Timeline extends Component {
         />
       </TouchableOpacity>
     ),
-  };
+  });
 
   state = {
     tweets: [],
   };
 
   componentDidMount() {
+    this.subscribeToEvents();
     this.getTweets();
   }
+
+  subscribeToEvents = () => {
+    const io = socket(API_URL);
+    io.on('tweet', data => {
+      this.setState({tweets: [data, ...this.state.tweets]});
+    });
+    io.on('like', data => {
+      this.setState({
+        tweets: this.state.tweets.map(tweet =>
+          tweet._id === data._id ? data : tweet,
+        ),
+      });
+    });
+  };
 
   getTweets = async () => {
     try {
@@ -60,6 +69,7 @@ export default class Timeline extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
