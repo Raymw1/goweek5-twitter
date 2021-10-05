@@ -9,10 +9,26 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Tweet from '../components/Tweet';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default class Timeline extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Início',
     headerTitleAlign: 'center',
+    headerLeft: () => (
+      <TouchableOpacity
+        onPress={async () => {
+          await AsyncStorage.setItem('@GoTweet:username', '');
+          navigation.navigate('Login');
+        }}>
+        <Icon
+          style={{marginLeft: 10}}
+          name="logout"
+          size={24}
+          color="#4BB0EE"
+        />
+      </TouchableOpacity>
+    ),
     headerRight: () => (
       <TouchableOpacity onPress={() => navigation.navigate('New')}>
         <Icon
@@ -56,6 +72,8 @@ export default class Timeline extends Component {
       console.error(error);
     }
   };
+
+  handleLogout = () => {};
 
   render() {
     return (
